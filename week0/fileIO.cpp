@@ -15,17 +15,17 @@ int main()
 {
 
     //file object
-    ofstream fileObject;
+    ofstream fileObject("test.txt");
     
-    fileObject.open("test.txt");
-    
+    if (fileObject.is_open()) {
+		cout << "file is open" << endl;
+	} else {
+		cout << "meassed up!"<< endl;
+	}
+
     fileObject << "test a filestream\n";
     
     fileObject.close();
-    
-    
-    
-    
     
     return 0;
 }
