@@ -12,3 +12,6 @@ xcuserdata/
 # Generated files
 *.o
 *.out
+
+.metadata/
+RemoteSystemsTempFiles/
