@@ -15,3 +15,8 @@ xcuserdata/
 
 .metadata/
 RemoteSystemsTempFiles/
+*.project
+*.d
+*.mk
+*.cproject
+*/Debug/*
