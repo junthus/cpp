@@ -40,9 +40,9 @@ void throwException () {
 int main() {
     std::string line;
 
-    std::getline(std::cin, line);
-    int numOfTest = std::atoi(line.c_str());
-    // int numOfTest = 2;
+    // std::getline(std::cin, line);
+    // int numOfTest = std::atoi(line.c_str());
+    int numOfTest = 2;
 
     while(numOfTest-- > 0) {
         std::stack<std::pair<int,int> > stk;
@@ -52,11 +52,12 @@ int main() {
 
         for (int i = 0; i < line.size(); ++i) {
             int which = convert(line[i]);
+
             std::pair <int,int> itm;
 
             if (which > 0) {
-                itm.first = which;
-                itm.second = i;
+                itm.first = which; //1, 2, 3
+                itm.second = i; //index
                 stk.push(itm);
             } else if (which < 0) {
                 itm = stk.top();
@@ -68,18 +69,25 @@ int main() {
                         ret *= itm.first;
                     }
 
+                    std::cout << "test : " << ret << std::endl;
+
                     stk.pop();
                 } else {
-                    throwException();
-                    continue;
+                    ret = -1;
+                    break;
                 }
             } else {
-                throwException();
-                continue;
+                ret = -1;
+                break;
             }
         }
 
-        std::cout << ret % 100000000 << std::endl;
+        if (ret < 0) {
+            std::cout << 0 << std::endl;
+        } else {
+            std::cout << ret % 100000000 << std::endl;
+        }
+
     }
 
 	return 0;
