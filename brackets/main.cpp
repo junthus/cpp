@@ -4,6 +4,9 @@
 #include <stack>
 #include <utility>
 
+static int MUL = '*';
+static int ADD = '+';
+
 int convert (int itm) {
     int ret;
     switch (itm) {
@@ -37,16 +40,29 @@ void throwException () {
     std::cout << 0 << std::endl;
 }
 
+bool isOpenBracket(int which) {
+    return which > 0;
+}
+
+bool isPair(int a, int b) {
+    return a == b;
+}
+
 int main() {
     std::string line;
 
-    // std::getline(std::cin, line);
-    // int numOfTest = std::atoi(line.c_str());
-    int numOfTest = 2;
+    std::getline(std::cin, line);
+    int numOfTest = std::atoi(line.c_str());
+    // int numOfTest = 2;
 
     while(numOfTest-- > 0) {
-        std::stack<std::pair<int,int> > stk;
+        std::stack<std::pair<int,int> > addStack;
+        std::stack<std::pair<int,int> > multiplyStack;
+
         int ret = 0;
+        int tmp = 0;
+        int count = 0;
+        int before = 0;
 
         std::getline(std::cin, line);
 
@@ -55,32 +71,55 @@ int main() {
 
             std::pair <int,int> itm;
 
-            if (which > 0) {
-                itm.first = which; //1, 2, 3
-                itm.second = i; //index
-                stk.push(itm);
-            } else if (which < 0) {
-                itm = stk.top();
+            if (isOpenBracket(which)) {
+                itm.first = which;
+                itm.second = i;
 
-                if (itm.first == -which) {
-                    if (itm.second == i-1) { //+
+                if (isOpenBracket(before)) {
+                    multiplyStack.push(itm);
+                    count++;
+                } else if (!isOpenBracket(before)) {
+                    addStack.push(itm);
+                }
+
+            } else {
+                if (count == 0) {
+                    if (isPair(before, -which)) {
+                        itm = addStack.top();
                         ret += itm.first;
-                    } else { //*
-                        ret *= itm.first;
+                        addStack.pop();
+                    } else {
+                        ret = -1;
+                        break;
+                    }
+                } else {
+                    if (isPair(before, -which)) {
+                        itm = addStack.top();
+                        tmp += itm.first;
+                        addStack.pop();
+                    } else {
+                        itm = multiplyStack.top();
+                        tmp *= itm.first;
+                        multiplyStack.pop();
+                        count--;
+
+                        if (count == 0) {
+                            ret += tmp;
+                        }
                     }
 
-                    std::cout << "test : " << ret << std::endl;
-
-                    stk.pop();
-                } else {
-                    ret = -1;
-                    break;
+                    if (itm.first !=  -which) {
+            std::cout << "MUL " << itm.first << " , " << -which << " at: " << i << std::endl;
+                        ret = -1;
+                        break;
+                    }
                 }
-            } else {
-                ret = -1;
-                break;
             }
+            std::cout << "    RET " << ret << std::endl;
+
+            before = which;
         }
+
 
         if (ret < 0) {
             std::cout << 0 << std::endl;
